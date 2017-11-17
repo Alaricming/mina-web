@@ -1,0 +1,19 @@
+@mixin abs-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin filter($opacity) {
+    opacity: $opacity;
+}
+
+@mixin background($color, $img, $size:cover, $repeat: no-repeat, $origin: border-box, $clip: border-box) {
+    background-color: $color;
+    background-image: url($img);
+    background-size: $size;
+    background-repeat: $repeat;
+    background-origin: $origin;
+    background-clip: $clip;
+}
