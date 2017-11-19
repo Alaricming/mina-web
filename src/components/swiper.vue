@@ -1,8 +1,8 @@
 <template>
-    <swiper :options="options">
-        <swiper-slide v-for="slide in slides" :key="slide">{{slide}}</swiper-slide>    
-        <!-- <div class="swiper-pagination" slot="pagination"></div> -->
-    </swiper>
+  <swiper :options="options">
+    <swiper-slide v-for="slide in slides" :key="slide">{{slide}}</swiper-slide>
+    <!-- <div class="swiper-pagination" slot="pagination"></div> -->
+  </swiper>
 </template>
 <script>
 import awesomeSwiper from 'vue-awesome-swiper'
