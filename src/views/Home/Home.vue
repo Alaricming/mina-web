@@ -2,27 +2,49 @@
   <div class="home-wrapper">
     <scroll ref="scroll" :data="articleList" :listenScroll="listenScroll">
       <div class="content">
-          <div class="header">
-              <div class="swiper">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img class="imgload" src="http://mooc.inxedu.com/images/upload/image/20151026/1446026886181.jpg" alt="首页banner图片01">
-                  </div>
-                  <div class="swiper-slide">
-                    <img class="imgload" src="http://mooc.inxedu.com/images/upload/image/20151026/1446026905031.jpg" alt="首页banner图片02">
-                  </div>
-                </div>
-                <div class="swiper-pagination"></div>
+        <div class="header">
+          <!-- top swiper -->
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" v-for="item in topSlideAd">
+                <a :href="baseUrl + item.link"><img class="imgload" :src="baseUrl + item.pic" alt=""></a>
               </div>
-              <div class="slogan">
-                <img :src="homeSloganUrl" />
-              </div>
-              <ul class="categories">
-                <li v-for="(item,index) in homeCategories" :key="index">
-                  <img :src="item.icon" alt="">
-                </li>
-              </ul>
+            </div>
+            <div class="swiper-pagination"></div>
           </div>
+          <!-- slogan -->
+          <div class="slogan">
+            <img :src="homeSloganUrl" />
+          </div>
+          <!-- icon list -->
+          <ul class="categories">
+            <li v-for="(item,index) in homeCategories" :key="index">
+              <img :src="item.icon" alt="">
+            </li>
+          </ul>
+          <div class="ad">
+            <div class="ad-lf">
+              <img :src="baseUrl + data.top3LeftAd[0].pic" alt="">
+            </div>
+            <div class="ad-rt">
+              <div class="ad-rt-above">
+                <img :src="baseUrl + data.top3RightAboveAd[0].pic" alt="">
+              </div>
+              <div class="ad-rt-below">
+                <img :src="baseUrl + data.top3RightBelowAd[0].pic" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="article">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide article-item" v-for="item in articleList">
+                <!-- <a :href="baseUrl + item.link"><img class="imgload" :src="baseUrl + item.pic" alt=""></a> -->
+                <a><img class="imgload" :src="baseUrl + item.pic" alt=""></a>
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
       </div>
     </scroll>
   </div>
@@ -46,13 +68,17 @@ export default {
       topSlideAd: null,
       homeSloganUrl: '',
       homeCategories: null,
-      swiper: null,
-      options: {
-        direction: 'horizontal',
-        loop: true,
-        pagination: '.swiper-pagination',
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev'
+      topSwiper: null,
+      articleSwiper: null,
+      topOptions: {
+        autoplay: true,
+        grabCursor: true // 抓手形状
+      },
+      articleSwiperOptions: {
+        // autoplay: true,
+        grabCursor: true, // 抓手形状
+        freeMode: true,
+        centeredSlides: true
       }
     }
   },
@@ -68,23 +94,22 @@ export default {
           this.topSlideAd = this.data.topSlideAd
           this.homeSloganUrl = this.data.homeSloganUrl
           this.homeCategories = this.data.homeCategories
-          console.log(this.articleList)
         },
         () => {
           console.log('request failed')
         }
       )
-    this.$nextTick(() => {
+    setTimeout(() => {
       this.initSwiper()
-    })
+    }, 200)
   },
   methods: {
     scroll() {
       console.log('scroll')
     },
     initSwiper() {
-      this.swiper = new Swiper('.swiper', this.options)
-      console.log(this.swiper)
+      this.topSwiper = new Swiper('.swiper', this.topOptions)
+      this.articleSwiper = new Swiper('.article', this.articleSwiperOptions)
     }
   }
 }
@@ -104,6 +129,31 @@ export default {
         flex: 1;
         padding: 0.5rem;
         align-self: center;
+      }
+    }
+    // top swiper
+    .ad {
+      display: flex;
+      padding: 0.2rem;
+      .ad-lf {
+        flex: 1;
+      }
+      .ad-rt {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+        padding-left: 0.2rem;
+      }
+      .ad-rt-above,
+      .ad-rt-below {
+        flex: 1;
+      }
+    }
+    .article {
+      padding: 0.5rem;
+      .swiper-wrapper{
+        width: 100%;
       }
     }
   }
