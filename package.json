@@ -15,6 +15,7 @@
     "axios": "^0.17.1",
     "better-scroll": "^1.4.2",
     "element-ui": "^2.0.4",
+    "swiper": "^4.0.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

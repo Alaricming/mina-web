@@ -3,8 +3,16 @@
     <scroll ref="scroll" :data="articleList" :listenScroll="listenScroll">
       <div class="content">
           <div class="header">
-              <div class="slider">
-                <img :src="baseUrl + topSlideAd[3].pic" alt="">
+              <div class="swiper">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <img class="imgload" src="http://mooc.inxedu.com/images/upload/image/20151026/1446026886181.jpg" alt="首页banner图片01">
+                  </div>
+                  <div class="swiper-slide">
+                    <img class="imgload" src="http://mooc.inxedu.com/images/upload/image/20151026/1446026905031.jpg" alt="首页banner图片02">
+                  </div>
+                </div>
+                <div class="swiper-pagination"></div>
               </div>
               <div class="slogan">
                 <img :src="homeSloganUrl" />
@@ -21,6 +29,7 @@
 </template>
 <script>
 import Scroll from '../../components/scroller'
+import Swiper from 'swiper'
 import { baseUrl } from '../../assets/js/constant.js'
 import { API_HOME } from '../../assets/js/api.js'
 export default {
@@ -36,7 +45,15 @@ export default {
       picList: null,
       topSlideAd: null,
       homeSloganUrl: '',
-      homeCategories: null
+      homeCategories: null,
+      swiper: null,
+      options: {
+        direction: 'horizontal',
+        loop: true,
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev'
+      }
     }
   },
   mounted() {
@@ -57,16 +74,24 @@ export default {
           console.log('request failed')
         }
       )
+    this.$nextTick(() => {
+      this.initSwiper()
+    })
   },
   methods: {
     scroll() {
       console.log('scroll')
+    },
+    initSwiper() {
+      this.swiper = new Swiper('.swiper', this.options)
+      console.log(this.swiper)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '../../assets/style/common.scss';
+@import '../../../node_modules/swiper/dist/css/swiper.min.css';
 .content {
   .header {
     .slogan {
@@ -74,10 +99,10 @@ export default {
     }
     .categories {
       display: flex;
-      padding: 0 .5rem .5rem;
-      li{
+      padding: 0 0.5rem 0.5rem;
+      li {
         flex: 1;
-        padding: .5rem;
+        padding: 0.5rem;
         align-self: center;
       }
     }
