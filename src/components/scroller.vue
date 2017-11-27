@@ -20,9 +20,6 @@ export default {
       type: String,
       default: 'vertical'
     },
-    /**
-       * 是否派发滚动事件
-       */
     listenScroll: {
       type: Boolean,
       default: false

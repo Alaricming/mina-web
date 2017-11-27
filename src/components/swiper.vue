@@ -1,46 +1,64 @@
 <template>
-  <swiper :options="options">
-    <swiper-slide v-for="slide in slides" :key="slide">{{slide}}</swiper-slide>
-    <!-- <div class="swiper-pagination" slot="pagination"></div> -->
-  </swiper>
+    <div class="swiper" :data="data">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="item in data">
+                <img class="imgload img-item" :src="baseUrl + item.pic" alt="">
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
 </template>
 <script>
-import awesomeSwiper from 'vue-awesome-swiper'
+import Swiper from 'swiper'
+import { baseUrl } from '../assets/js/constant.js'
+
 export default {
   props: {
-    // options: {
-    //   type: Array,
-    //   default: []
-    // },
-    slides: {
+    data: {
       type: Array,
-      default: []
+      default: null
+    },
+    direction: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
+      baseUrl,
       options: {
-        autoplay: 3500,
-        setWrapperSize: true,
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
-        mousewheelControl: true,
-        observeParents: true
-      },
-      slides: [1, 2, 3, 4, 5]
-    }
-  },
-  computed: {
-    swiper() {
-      return this.$refs.mySwiper.swiper
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets'
+        },
+        autoplay: true,
+        grabCursor: true, // 抓手形状
+        direction: this.direction || 'horizontal'
+      }
     }
   },
   mounted() {
-    console.log('current swiper object', this.swiper)
-    this.swiper.slideTo(3, 1000, false)
+    // this.$nextTick(() => {
+    //   this.initSwiper()
+    // })
+    setTimeout(() => {
+      this.initSwiper()
+    }, 200)
+  },
+  methods: {
+    initSwiper() {
+      this.swiper = new Swiper('.swiper', this.options)
+      this.config()
+    },
+    config() {
+      // this.swiper.pagination.bullets.css('background', '#d61718')
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
-
+@import '../../node_modules/swiper/dist/css/swiper.min.css';
+.img-item {
+  width: 100%;
+}
 </style>

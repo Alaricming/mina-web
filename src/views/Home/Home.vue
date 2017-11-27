@@ -3,15 +3,7 @@
     <scroll ref="scroll" :data="articleList" :listenScroll="listenScroll">
       <div class="content">
         <div class="header">
-          <!-- top swiper -->
-          <div class="swiper">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide" v-for="item in topSlideAd">
-                <a :href="baseUrl + item.link"><img class="imgload" :src="baseUrl + item.pic" alt=""></a>
-              </div>
-            </div>
-            <div class="swiper-pagination"></div>
-          </div>
+          <swiper :data="topSlideAd" :direction="headerDirect"></swiper>
           <!-- slogan -->
           <div class="slogan">
             <img :src="homeSloganUrl" />
@@ -24,65 +16,53 @@
           </ul>
           <div class="ad">
             <div class="ad-lf">
-              <img :src="baseUrl + data.top3LeftAd[0].pic" alt="">
+              <img :src="baseUrl + top3LeftAdPic" alt="">
             </div>
             <div class="ad-rt">
               <div class="ad-rt-above">
-                <img :src="baseUrl + data.top3RightAboveAd[0].pic" alt="">
+                <img :src="baseUrl + top3RightAboveAdPic" alt="">
               </div>
               <div class="ad-rt-below">
-                <img :src="baseUrl + data.top3RightBelowAd[0].pic" alt="">
+                <img :src="baseUrl + top3RightBelowAdPic" alt="">
               </div>
             </div>
-          </div>
-          <div class="article">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide article-item" v-for="item in articleList">
-                <!-- <a :href="baseUrl + item.link"><img class="imgload" :src="baseUrl + item.pic" alt=""></a> -->
-                <a><img class="imgload" :src="baseUrl + item.pic" alt=""></a>
-              </div>
-            </div>
-            <div class="swiper-pagination"></div>
           </div>
         </div>
+        <swiper :data="articleList" :direction="goodsDirect"></swiper>
       </div>
     </scroll>
   </div>
 </template>
 <script>
 import Scroll from '../../components/scroller'
-import Swiper from 'swiper'
+import Swiper from '../../components/swiper'
 import { baseUrl } from '../../assets/js/constant.js'
 import { API_HOME } from '../../assets/js/api.js'
+import store from '../../store/store.js'
 export default {
   components: {
-    Scroll
+    Scroll,
+    Swiper
   },
   data() {
     return {
       baseUrl,
       listenScroll: true,
       data: null,
+      count: 0,
       articleList: null,
-      picList: null,
       topSlideAd: null,
-      homeSloganUrl: '',
+      homeSloganUrl: null,
       homeCategories: null,
-      topSwiper: null,
-      articleSwiper: null,
-      topOptions: {
-        autoplay: true,
-        grabCursor: true // 抓手形状
-      },
-      articleSwiperOptions: {
-        // autoplay: true,
-        grabCursor: true, // 抓手形状
-        freeMode: true,
-        centeredSlides: true
-      }
+      top3LeftAdPic: '',
+      top3RightAboveAdPic: '',
+      top3RightBelowAdPic: '',
+      headerDirect: 'horizontal',
+      goodsDirect: 'horizontal'
     }
   },
   mounted() {
+    console.log(store.state.count)
     this.$ajax
       .get(this.baseUrl + API_HOME.getHomeAdvertisements + '?h5=true')
       .then(
@@ -92,6 +72,9 @@ export default {
           this.articleList = this.data.articleList
           this.picList = this.data.picList
           this.topSlideAd = this.data.topSlideAd
+          this.top3RightAboveAdPic = this.data.top3RightAboveAd[0].pic
+          this.top3RightBelowAdPic = this.data.top3RightBelowAd[0].pic
+          this.top3LeftAdPic = this.data.top3LeftAd[0].pic
           this.homeSloganUrl = this.data.homeSloganUrl
           this.homeCategories = this.data.homeCategories
         },
@@ -99,24 +82,21 @@ export default {
           console.log('request failed')
         }
       )
-    setTimeout(() => {
-      this.initSwiper()
-    }, 200)
   },
   methods: {
     scroll() {
       console.log('scroll')
-    },
-    initSwiper() {
-      this.topSwiper = new Swiper('.swiper', this.topOptions)
-      this.articleSwiper = new Swiper('.article', this.articleSwiperOptions)
     }
+  },
+  computed: {
+    // totalCount() {
+    //   return store.mutations.increment(count)
+    // }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '../../assets/style/common.scss';
-@import '../../../node_modules/swiper/dist/css/swiper.min.css';
 .content {
   .header {
     .slogan {
@@ -131,7 +111,6 @@ export default {
         align-self: center;
       }
     }
-    // top swiper
     .ad {
       display: flex;
       padding: 0.2rem;
@@ -145,14 +124,10 @@ export default {
         flex: 1;
         padding-left: 0.2rem;
       }
-      .ad-rt-above,
-      .ad-rt-below {
-        flex: 1;
-      }
     }
     .article {
       padding: 0.5rem;
-      .swiper-wrapper{
+      .swiper-wrapper {
         width: 100%;
       }
     }
