@@ -38,7 +38,6 @@ import Scroll from '../../components/scroller'
 import Swiper from '../../components/swiper'
 import { baseUrl } from '../../assets/js/constant.js'
 import { API_HOME } from '../../assets/js/api.js'
-import store from '../../store/store.js'
 export default {
   components: {
     Scroll,
@@ -62,12 +61,10 @@ export default {
     }
   },
   mounted() {
-    console.log(store.state.count)
     this.$ajax
       .get(this.baseUrl + API_HOME.getHomeAdvertisements + '?h5=true')
       .then(
         res => {
-          console.log(res)
           this.data = res.data
           this.articleList = this.data.articleList
           this.picList = this.data.picList
@@ -87,11 +84,6 @@ export default {
     scroll() {
       console.log('scroll')
     }
-  },
-  computed: {
-    // totalCount() {
-    //   return store.mutations.increment(count)
-    // }
   }
 }
 </script>
