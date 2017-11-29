@@ -4,5 +4,8 @@ export default {
   },
   reduce(state) {
     state.count--
+  },
+  refineUserId(state,id){
+    state.userId = id
   }
 }
